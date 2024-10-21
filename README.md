@@ -37,10 +37,8 @@ You can use this Adaptor as a model for structuring your own AnyCost Stream Adap
 ### Prerequisites
 
 - Python 3.9 or newer
-- [An existing AnyCost Stream connection](https://docs.cloudzero.com/docs/anycost-stream-getting-started#step-1-register-the-connection-in-the-ui)
-- [A CloudZero API key](https://app.cloudzero.com/organization/api-keys)
 
-### Install Dependencies
+### Install Dependency
 
 Consider using the [venv](https://docs.python.org/3/library/venv.html) system module to create a virtual environment:
 
@@ -102,13 +100,14 @@ The final step is for the Adaptor to send the CBF data to the AnyCost Stream con
 
 ## Running the Script
 
-The Python script processes cloud billing data and uploads it to an AnyCost Stream connection. You can now specify input and output file paths as command-line arguments. Ensure that you have Python 3.9 or newer installed before running the script. Below are the steps and usage instructions:
+The Python script processes cloud billing data and uploads it to an AnyCost Stream connection. You can specify input and output file paths as command-line arguments. Below are the steps and usage instructions:
 
 ### Prerequisites
 
 - Ensure you have Python 3.9 or newer installed.
 - Prepare your CSV files for usage data, purchase commitments, and discounts.
-- Have your CloudZero API key ready for uploading data.
+- Create an [AnyCost Stream connection](https://docs.cloudzero.com/docs/anycost-stream-getting-started#step-1-register-the-connection-in-the-ui).
+- Have your [CloudZero API key](https://app.cloudzero.com/organization/api-keys) ready for uploading data.
 
 ### Usage
 
@@ -146,18 +145,6 @@ Once uploaded, you can view the processed data within the CloudZero platform. Na
 ## Usage Examples
 
 To use the `anycost_example.py` script to transform the cost data to CBF, run the command as described in the [Running the Script](#running-the-script) section.
-
-The script then optionally uploads the example CBF to an AnyCost Stream connection. To upload the data:
-
-1. Enter `y` at the prompt.
-2. Enter your AnyCost Stream connection ID.
-3. Enter your CloudZero API key.
-
-The script sends the example CBF data to CloudZero, which processes the first ingest of data.
-
-You can view the data in CloudZero by navigating to [Settings](https://app.cloudzero.com/organization/connections) and selecting your connection from the **Billing Connections** table.
-
-On the connection details page, the **Status** changes from **Pending Data** to **Healthy** after CloudZero has finished processing the data. Note that this can take several hours.
 
 ## Contributing
 
