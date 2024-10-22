@@ -112,7 +112,7 @@ def main():
     parser.add_argument("--usage", required=True, help="Path to the usage data CSV file.")
     parser.add_argument("--commitments", help="Path to the purchase commitments CSV file.")
     parser.add_argument("--discounts", help="Path to the discounts CSV file.")
-    parser.add_argument("--output", required=True, help="Path to the output CBF CSV file.")
+    parser.add_argument("--output", default="cbf_output.csv", help="Path to the output CBF CSV file. (default: cbf_output.csv)")
     args = parser.parse_args()
 
     cbf_rows = []
