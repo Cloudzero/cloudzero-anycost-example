@@ -55,7 +55,7 @@ source venv/bin/activate
 Install the required dependency, which is the Python [requests](https://requests.readthedocs.io/en/latest/) module:
 
 ```bash
-pip install -r requirements.txt
+pip install requests
 ```
 
 ## Getting Started
