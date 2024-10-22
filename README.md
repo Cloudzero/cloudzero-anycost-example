@@ -120,12 +120,18 @@ python anycost_example.py --usage <path_to_usage_csv> --commitments <path_to_com
 ### Arguments
 
 - `--usage`: Path to the CSV file containing usage data. This file should include columns like `cost`, `discount`, `sku`, `instance_id`, and `usage_date`.
-- `--commitments`: Path to the CSV file containing purchase commitments data. This file should include columns like `commitment_id`, `commitment_date`, and `cost`.
-- `--discounts`: Path to the CSV file containing discounts data. This file should include columns like `discount_type`, `discount_id`, `usage_date`, and `discount`.
-- `--output`: Path to the output CSV file where transformed CBF data will be saved.
+- `--commitments` (Optional): Path to the CSV file containing purchase commitments data. This file should include columns like `commitment_id`, `commitment_date`, and `cost`.
+- `--discounts` (Optional): Path to the CSV file containing discounts data. This file should include columns like `discount_type`, `discount_id`, `usage_date`, and `discount`.
+- `--output` (Default: `cbf_output.csv`): Path to the output CSV file where transformed CBF data will be saved.
 
 ### Example
 
+The minimum parameter set is `--usage`. With only `--usage` specified, the script will process the usage data, skip discounts and purchase commitments, and save it to an output file called `cbf_output.csv` in the current working directory.
+```bash
+python anycost_example.py --usage example_cloud_provider_data/cloud_usage.csv --commitments example_cloud_provider_data/cloud_purchase_commitments.csv --discounts example_cloud_provider_data/cloud_discounts.csv --output cbf/cloud_cbf.csv
+```
+
+With `--commitments`, `--discounts`, and `--output` specified, the script will process all three data types and save the output to the file specified in `--output`.
 ```bash
 python anycost_example.py --usage example_cloud_provider_data/cloud_usage.csv --commitments example_cloud_provider_data/cloud_purchase_commitments.csv --discounts example_cloud_provider_data/cloud_discounts.csv --output cbf/cloud_cbf.csv
 ```
