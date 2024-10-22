@@ -110,15 +110,19 @@ def upload_to_anycost(cbf_rows: list[dict[str, str]]):
 def main():
     parser = argparse.ArgumentParser(description="Process and upload cloud billing data.")
     parser.add_argument("--usage", required=True, help="Path to the usage data CSV file.")
-    parser.add_argument("--commitments", required=True, help="Path to the purchase commitments CSV file.")
-    parser.add_argument("--discounts", required=True, help="Path to the discounts CSV file.")
+    parser.add_argument("--commitments", help="Path to the purchase commitments CSV file.")
+    parser.add_argument("--discounts", help="Path to the discounts CSV file.")
     parser.add_argument("--output", required=True, help="Path to the output CBF CSV file.")
     args = parser.parse_args()
 
     cbf_rows = []
     cbf_rows.extend(process_usage_data(args.usage))
-    cbf_rows.extend(process_purchase_commitments(args.commitments))
-    cbf_rows.extend(process_discounts(args.discounts))
+    
+    if args.commitments:
+        cbf_rows.extend(process_purchase_commitments(args.commitments))
+    
+    if args.discounts:
+        cbf_rows.extend(process_discounts(args.discounts))
 
     write_cbf_rows_to_csv(cbf_rows, args.output)
 
