@@ -122,7 +122,7 @@ python anycost_example.py --usage <path_to_usage_csv> --commitments <path_to_com
 - `--usage`: Path to the CSV file containing usage data. This file should include columns like `cost`, `discount`, `sku`, `instance_id`, and `usage_date`.
 - `--commitments` (Optional): Path to the CSV file containing purchase commitments data. This file should include columns like `commitment_id`, `commitment_date`, and `cost`.
 - `--discounts` (Optional): Path to the CSV file containing discounts data. This file should include columns like `discount_type`, `discount_id`, `usage_date`, and `discount`.
-- `--output` (Default: `cbf_output.csv`): Path to the output CSV file where transformed CBF data will be saved.
+- `--output` (Optional): Path to the output CSV file where transformed CBF data will be saved. Defaults to `cbf_output.csv`
 
 ### Example
 
