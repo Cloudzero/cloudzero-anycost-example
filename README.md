@@ -126,9 +126,9 @@ python anycost_example.py --usage <path_to_usage_csv> --commitments <path_to_com
 
 ### Example
 
-The minimum parameter set is `--usage`. With only `--usage` specified, the script will process the usage data, skip discounts and purchase commitments, and save it to an output file called `cbf_output.csv` in the current working directory.
+The minimum parameter set is `--usage`. With only `--usage` specified, the script will process the usage data, skip discounts and purchase commitments, and save the CBF to an output file called `cbf_output.csv` in the current working directory.
 ```bash
-python anycost_example.py --usage example_cloud_provider_data/cloud_usage.csv --commitments example_cloud_provider_data/cloud_purchase_commitments.csv --discounts example_cloud_provider_data/cloud_discounts.csv --output cbf/cloud_cbf.csv
+python anycost_example.py --usage example_cloud_provider_data/cloud_usage.csv
 ```
 
 With `--commitments`, `--discounts`, and `--output` specified, the script will process all three data types and save the output to the file specified in `--output`.
