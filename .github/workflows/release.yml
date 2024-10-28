@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.ref }}-release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: version
+        id: version
+        uses: ./
+        with:
+          incrementLevel: patch
+          source: tags
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.version.outputs.nextVersion }}
+          tag_name: ${{ steps.version.outputs.nextVersion }}
