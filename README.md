@@ -8,7 +8,6 @@ This repository contains a Python script that serves as an example of an Adaptor
 
 You can use this Adaptor as a model for structuring your own AnyCost Stream Adaptor, modifying it to fit your use case.
 
-**Note:** The AnyCost Stream feature is in beta. Contact your CloudZero representative to request access.
 
 ## Table of Contents
 
@@ -64,25 +63,48 @@ An [AnyCost Stream connection](https://docs.cloudzero.com/docs/anycost-stream-ge
 
 An [AnyCost Stream Adaptor](https://docs.cloudzero.com/docs/anycost-custom-adaptors) is the code that queries data from the provider, transforms it to fit the required format, and sends the transformed data to CloudZero.
 
+### Quick Start for New Users
+
+1. **Prerequisites**: Ensure you have Python 3.9+ installed and access to your cost data in CSV format
+2. **Setup**: Clone this repository and install dependencies ([Installation](#installation))
+3. **Prepare Data**: Format your CSV files or use the provided examples
+4. **Run Script**: Execute with your data files and follow the interactive prompts
+5. **Upload**: Choose single month or batch processing to upload to CloudZero
+
+### Three Core Steps
+
 An AnyCost Stream Adaptor typically performs three actions:
 
 1. [Retrieve data from a cloud provider for a billing month.](#step-1-retrieve-cost-data-from-cloud-provider)
 2. [Transform the data into the Common Bill Format (CBF).](#step-2-transform-cost-data-to-cbf)
 3. [Send the CBF data to the CloudZero API.](#step-3-send-the-cbf-data-to-cloudzero)
 
-You can write an Adaptor in any language, but this example uses Python.
+You can write an Adaptor in any language, but this example uses Python and can be easily customized for different cloud providers.
 
 ### Step 1: Retrieve Cost Data From Cloud Provider
 
-Your Adaptor should start by retrieving cost data from your cloud provider. Follow your provider's instructions to retrieve the data you need. For example, this could involve sending requests to the provider's APIs to retrieve billing records for one or more accounts, or downloading a CSV of all cost data from the provider.
+Your Adaptor should start by retrieving cost data from your cloud provider. This step varies by provider:
 
-Because every provider makes its cost data available in a different way, the example Adaptor skips this step. Instead, we've provided you with three CSVs representing the data your Adaptor could retrieve from this step:
+**Common Data Sources:**
+- **AWS**: Cost and Usage Reports (CUR), billing CSV exports
+- **Azure**: Cost Management exports, billing data APIs
+- **GCP**: Billing export to BigQuery, Cloud Billing API
+- **Other Clouds**: Billing APIs, cost management dashboards, CSV exports
 
-- `cloud_usage.csv`: Data related to cloud resource usage
-- `cloud_purchase_commitments.csv`: Data for discounts related to committed-use contracts
-- `cloud_discounts.csv`: Data for other discounts received
+**For This Example:**
+Because every provider makes cost data available differently, this example uses three sample CSV files:
 
-The dummy data is taken from the [CBF example](https://docs.cloudzero.com/docs/anycost-common-bill-format-cbf#examples) in the CloudZero documentation.
+- `cloud_usage.csv`: Resource usage and compute costs
+- `cloud_purchase_commitments.csv`: Reserved instances, savings plans
+- `cloud_discounts.csv`: Volume discounts, credits, promotions
+
+**Customizing for Your Provider:**
+To adapt this script for your cloud provider:
+1. Replace the CSV reading logic with API calls to your provider
+2. Modify the data processing functions to match your provider's data structure
+3. Update the column mappings in the transformation functions
+
+See [Customization Guide](#customizing-for-different-cloud-providers) below for detailed instructions.
 
 ### Step 2: Transform Cost Data to CBF
 
@@ -143,6 +165,46 @@ After processing the data, the script will prompt you to upload the CBF data to 
 1. Enter `y` if you want to upload the data.
 2. Provide your AnyCost Stream Connection ID.
 3. Enter your CloudZero API key when prompted.
+4. Choose processing mode:
+   - **Single month**: Upload data for one billing month
+   - **Batch processing**: Upload data for multiple months
+5. Specify the billing month(s):
+   - **Single month**: `2024-08`
+   - **Month range**: `2024-08:2024-10` (uploads to Aug, Sep, Oct)
+   - **Comma-separated**: `2024-08,2024-09,2024-11`
+6. Choose an operation type:
+   - **replace_drop** (default): Replace all existing data for the month
+   - **replace_hourly**: Replace data with overlapping hours  
+   - **sum**: Append data to existing records
+
+#### Batch Processing Benefits
+
+- **Time-saving**: Upload historical data for multiple months in one session
+- **Progress tracking**: See upload progress and success/failure status for each month
+- **Error resilience**: Failed uploads for individual months won't stop the entire process
+- **Flexible input**: Support for ranges, lists, or individual months
+- **Input validation**: Comprehensive error checking with helpful suggestions
+- **Retry logic**: Multiple attempts for invalid input with clear error messages
+
+#### Error Handling
+
+The script provides comprehensive error handling and validation:
+
+**Month Format Validation**:
+- Validates YYYY-MM format (e.g., "2024-08")
+- Checks for valid date ranges in batch mode
+- Provides specific error messages for invalid formats
+
+**File Processing Errors**:
+- Clear messages for missing or inaccessible CSV files
+- Validation of required CSV columns
+- Row-by-row error reporting with line numbers
+
+**Network and API Errors**:
+- Timeout handling (30-second limit per request)
+- Connection error detection
+- HTTP status code reporting with error details
+- JSON parsing error handling
 
 ### Viewing Results
 
@@ -151,6 +213,111 @@ Once uploaded, you can view the processed data within the CloudZero platform. Na
 ## Usage Examples
 
 To use the `anycost_example.py` script to transform the cost data to CBF, run the command as described in the [Running the Script](#running-the-script) section.
+
+## Testing
+
+This repository includes a comprehensive test suite to ensure code quality and reliability.
+
+### Running Tests
+
+1. Create and activate a virtual environment:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+2. Install test dependencies:
+   ```bash
+   pip install -r tests/requirements-dev.txt
+   ```
+
+3. Run the test suite:
+   ```bash
+   python -m pytest tests/ -v
+   ```
+
+### Test Coverage
+
+The test suite includes 11 test cases covering:
+- CSV reading and processing functions
+- Data transformation for usage, commitments, and discounts
+- CBF output generation
+- AnyCost Stream API upload functionality with mocked requests
+- All operation types (replace_drop, replace_hourly, sum)
+
+All tests use proper mocking to isolate functionality and avoid external dependencies.
+
+## Customizing for Different Cloud Providers
+
+This script can be easily adapted for different cloud providers by modifying the data processing functions:
+
+### Step-by-Step Customization
+
+1. **Identify Your Data Source**
+   ```python
+   # Replace CSV reading with API calls
+   def get_provider_data(start_date, end_date):
+       # Example: Call your provider's billing API
+       # response = provider_client.get_billing_data(start=start_date, end=end_date)
+       # return response.data
+   ```
+
+2. **Update Data Processing Functions**
+   ```python
+   def process_usage_data(raw_data):
+       # Map your provider's fields to CBF format
+       cbf_rows = []
+       for item in raw_data:
+           cbf_rows.append({
+               "lineitem/type": "Usage",
+               "resource/service": item["service_name"],        # Your field
+               "resource/id": item["resource_identifier"],      # Your field  
+               "time/usage_start": item["billing_period"],      # Your field
+               "cost/cost": str(item["total_cost"]),           # Your field
+               "cost/discounted_cost": str(item["net_cost"]),  # Your field
+           })
+       return cbf_rows
+   ```
+
+3. **Common Provider Mappings**
+
+   **AWS CUR Fields:**
+   - `lineItem/LineItemType` → `lineitem/type`
+   - `product/ProductName` → `resource/service`
+   - `lineItem/ResourceId` → `resource/id`
+   - `lineItem/UsageStartDate` → `time/usage_start`
+   - `lineItem/UnblendedCost` → `cost/cost`
+
+   **Azure Billing Fields:**
+   - `MeterCategory` → `resource/service`
+   - `InstanceId` → `resource/id`
+   - `UsageDateTime` → `time/usage_start`
+   - `ExtendedCost` → `cost/cost`
+
+   **GCP Billing Fields:**
+   - `service.description` → `resource/service`
+   - `resource.name` → `resource/id`
+   - `usage_start_time` → `time/usage_start`
+   - `cost` → `cost/cost`
+
+4. **Test Your Changes**
+   ```bash
+   python -m pytest tests/ -v
+   ```
+
+### Common Troubleshooting
+
+**Issue: "Missing required columns in CSV"**
+- Solution: Update the `required_columns` list in processing functions to match your data
+
+**Issue: "Invalid cost/discount value"**  
+- Solution: Check your provider's number format (currency symbols, decimals)
+
+**Issue: "Invalid month format"**
+- Solution: Ensure dates are in YYYY-MM format, convert if needed
+
+**Issue: "Connection timeout"**
+- Solution: Increase timeout in upload function or implement retry logic
 
 ## Contributing
 

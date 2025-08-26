@@ -1,6 +1,6 @@
 # Contribution
 
-Please read [CloudZero contribution guidelines](https://github.com/cloudzero/open-source-template/blob/master/GENERAL-CONTRIBUTING.md).
+Please read [CloudZero contribution guidelines](https://github.com/Cloudzero/template-cloudzero-open-source/blob/main/GENERAL-CONTRIBUTING.md).
 
 ## Documentation
 
