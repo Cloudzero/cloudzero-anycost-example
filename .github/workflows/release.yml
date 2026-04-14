@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: version
         id: version
-        uses: flatherskevin/semver-action@v1
+        uses: Cloudzero/ops-github-actions/.github/actions/common/semver@v2
         with:
           incrementLevel: patch
           source: tags
